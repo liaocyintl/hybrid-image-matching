@@ -50,7 +50,7 @@ python run.py
 
 3. If the process was done correctly, it should output a summary in the console.
 
-![](imgs\ab8284a4.png)
+![](imgs/ab8284a4.png)
 
 ## Input and Output Files
 
@@ -64,7 +64,7 @@ Save the query images under the folder "input/query/" just like
         - 03.jpg
         - ...
 
-![](imgs\64a4dabc.png)
+![](imgs/64a4dabc.png)
 
 ### Input: Target Images
 Save the target images under the folder "input/target/" with class name:
@@ -83,7 +83,7 @@ Save the target images under the folder "input/target/" with class name:
             - ...
         - ...
         
-![](imgs\4a8825a8.png)
+![](imgs/4a8825a8.png)
         
 ### Output
 The matching result will be outputted in "output/result.json" as follows:
