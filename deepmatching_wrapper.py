@@ -64,18 +64,31 @@ def match(img1_path, img2_path, inverse=False, maxsize=200):
     try:
 
         name1, qw, qh, img1 = imresizecrop(img1_path, max_size=setting.MAX_WIDTH)
-        name2, tw, th, img2 = imresizecrop(img2_path, max_size=setting.MAX_WIDTH, inverse=inverse)
+        name2, tw, th, img2 = imresizecrop(img2_path, max_size=setting.MAX_WIDTH)
+        name3, tw, th, img3 = imresizecrop(img2_path, max_size=setting.MAX_WIDTH, inverse=True)
 
-        res = subprocess.run(
+        res1 = subprocess.run(
             [str(Path("deepmatching/deepmatching-static")), str(Path("temp/%s" % name1)), str(Path("temp/%s" % name2)), "-nt", str(setting.CPU_CORE)],
+            stdout=subprocess.PIPE)
+
+        res2 = subprocess.run(
+            [str(Path("deepmatching/deepmatching-static")), str(Path("temp/%s" % name1)), str(Path("temp/%s" % name3)),
+             "-nt", str(setting.CPU_CORE)],
             stdout=subprocess.PIPE)
 
         os.remove(Path("temp/%s" % name1))
         os.remove(Path("temp/%s" % name2))
+        os.remove(Path("temp/%s" % name3))
 
         result = []
 
-        rows = res.stdout.decode("utf-8").split("\n")
+        rows1 = res1.stdout.decode("utf-8").split("\n")
+        rows2 = res2.stdout.decode("utf-8").split("\n")
+
+        if len(rows1) > len(rows2):
+            rows = rows1
+        else:
+            rows = rows2
 
         for row in rows:
             v = row.split()
@@ -99,19 +112,20 @@ def parse_matches(matches):
     return M
 
 
-def draw_img(src1, src2, matches, path=None):
+def draw(src1, src2, matches, path=None):
     import random
+
 
     width_offset = src1.shape[1]
 
-    height = src1.shape[0] + src2.shape[0]
+    height = max(src1.shape[0], src2.shape[0])
     width = src1.shape[1] + src2.shape[1]
-    output = np.zeros((height, width, 3), dtype=np.uint8)
+    output = np.zeros((height + height, width, 3), dtype=np.uint8)
     output[0:src1.shape[0], 0:src1.shape[1]] = src1
-    output[0:src1.shape[0], src1.shape[1]:] = src1[:]
+    output[0:src2.shape[0], src1.shape[1]:] = src2[:]
 
-    output[src1.shape[0]:src2.shape[0] + src1.shape[0], 0:src2.shape[1]] = src2
-    output[src1.shape[0]:src2.shape[0] + src2.shape[0], src2.shape[1]:] = src2[:]
+    output[height:height + src1.shape[0], 0:src1.shape[1]] = src1
+    output[height:height + src2.shape[0], src1.shape[1]:] = src2[:]
 
     random.seed(444)
     r = lambda: random.randint(0, 255)
@@ -119,11 +133,11 @@ def draw_img(src1, src2, matches, path=None):
     for match in matches:
         color = (r(), r(), r())
 
-        cv2.line(output, tuple(map(int, (width_offset + match[0],  match[1]))),
-                 tuple(map(int, (width_offset + match[2], src1.shape[0] + match[3]))),
+        cv2.line(output, tuple(map(int, (match[0], height + match[1]))),
+                 tuple(map(int, (width_offset + match[2], height + match[3]))),
                  color)
-        cv2.circle(output, tuple(map(int, (width_offset + match[0],  match[1]))), 1, color, 2)
-        cv2.circle(output, tuple(map(int, (width_offset + match[2], src1.shape[0] + match[3]))), 1, color, 2)
+        cv2.circle(output, tuple(map(int, (match[0], height + match[1]))), 1, color, 2)
+        cv2.circle(output, tuple(map(int, (width_offset + match[2], height + match[3]))), 1, color, 2)
 
     cv2.imwrite(str(path), output)
 

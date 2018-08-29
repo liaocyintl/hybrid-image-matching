@@ -63,11 +63,15 @@ def match():
 
     candidate_matching_database = common.load_pickle("temp/candidate_matching_database.pickle")
 
+    common.prepare_clean_dir(Path("output/"))
+    common.prepare_clean_dir(Path("output/images/"))
+
     output = {}
     for query_file, candidates in candidate_matching_database.items():
+        query_name = Path(query_file).stem
         matching_result = []
         for target_class_name, target_images in candidates.items():
-            for (target_path, similarity) in target_images:
+            for i, (target_path, similarity) in enumerate(target_images):
                 print("Matching", query_file, "with target image", target_path)
 
                 matches, name1, name2, qw, qh, tw, th, img1, img2 = dm.match(query_file, target_path)
@@ -81,6 +85,9 @@ def match():
                     if np.isclose(m, 1):
                         i += 1
                         inlier.append(matches[index])
+
+                output_name = "%s_%s_%02d.jpg" % (query_name, target_class_name, i)
+                dm.draw(img1, img2, inlier, Path("output/images/") / output_name)
 
                 matching_result.append({
                     "class_name": target_class_name,
@@ -97,6 +104,6 @@ def summary():
         print("Query Image" , query_image , "is probably", target_images[0]["class_name"], "with inlier feature points", target_images[0]["inlier"])
 
 if __name__ == "__main__":
-    gen_candidate_database()
+    # gen_candidate_database()
     match()
     summary()
