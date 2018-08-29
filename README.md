@@ -50,7 +50,7 @@ python run.py
 
 3. If the process was done correctly, it should output a summary in the console.
 
-![](imgs\ab8284a4.png)
+![](imgs/ab8284a4.png)
 
 ## Input and Output Files
 
@@ -64,7 +64,7 @@ Save the query images under the folder "input/query/" just like
         - 03.jpg
         - ...
 
-![](imgs\64a4dabc.png)
+![](imgs/64a4dabc.png)
 
 ### Input: Target Images
 Save the target images under the folder "input/target/" with class name:
@@ -83,7 +83,7 @@ Save the target images under the folder "input/target/" with class name:
             - ...
         - ...
         
-![](imgs\4a8825a8.png)
+![](imgs/4a8825a8.png)
         
 ### Output
 The matching result will be outputted in "output/result.json" as follows:
@@ -113,6 +113,20 @@ The structure of the result JSON file is
     
 The predicted class names in the list are sorted by the inlier feature point number.
 Therefore the first one is probably the class of the query image. 
+
+## Cite
+If you like this work please cite our paper
+
+```text
+@article{liao2018,
+  title={Image-Matching based Identification of Store Signage using Web-Crawled Information},
+  author={Liao, Chenyi and Wang, Weimin and Sakurada, Ken and Kawaguchi, Nobuo},
+  journal={IEEE ACCESS},
+  volume={6},
+  pages = {1-16},
+  year={2018}
+}
+```
 
 ## References
 [1]  J. Revaud, P. Weinzaepfel, Z. Harchaoui, and C. Schmid, “Deepmatching: Hierarchical deformable dense matching,” International Journal of Computer Vision (IJCV), pp. 1–24, 2016.
