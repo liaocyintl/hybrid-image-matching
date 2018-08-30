@@ -159,7 +159,7 @@ def matching_test():
             inliear.append(matches[index])
 
     path = Path("temp/test.jpg")
-    draw_img(img1, img2, inliear, path)
+    draw(img1, img2, inliear, path)
     print("matches", len(matches))
     print("inliear", i)
 

@@ -107,6 +107,6 @@ def summary():
         print("Query Image" , query_image , "is probably", target_images[0]["class_name"], "with" , target_images[0]["inlier"], "inlier feature points")
 
 if __name__ == "__main__":
-    # gen_candidate_database()
+    gen_candidate_database()
     match()
     summary()
