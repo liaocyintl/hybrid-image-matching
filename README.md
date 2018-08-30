@@ -50,7 +50,7 @@ python run.py
 
 3. If the process was done correctly, it should output a summary in the console.
 
-![](imgs/ab8284a4.png)
+![](imgs/7fb604de.png)
 
 ## Input and Output Files
 
@@ -84,9 +84,13 @@ Save the target images under the folder "input/target/" with class name:
         - ...
         
 ![](imgs/4a8825a8.png)
-        
+
+### Output: Matching Results
+
+![](imgs/d27d64bf.png)
+
 ### Output
-The matching result will be outputted in "output/result.json" as follows:
+The matching result file is outputted in "output/result.json" as follows:
 ```json
 {
   "01.jpg": [

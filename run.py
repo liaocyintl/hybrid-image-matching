@@ -10,6 +10,8 @@ def gen_candidate_database():
     from imagefeature import ImageFeature
     print("Candidate Matching Database Generation Start")
 
+    common.prepare_clean_dir(Path("temp/"))
+
     IF = ImageFeature()
 
     query_features, query_pathes, orbs = [], [], []
@@ -61,7 +63,7 @@ def match():
     import deepmatching_wrapper as dm
     import cv2
 
-    candidate_matching_database = common.load_pickle("temp/candidate_matching_database.pickle")
+    candidate_matching_database = common.load_pickle(Path("temp/candidate_matching_database.pickle"))
 
     common.prepare_clean_dir(Path("output/"))
     common.prepare_clean_dir(Path("output/images/"))
@@ -78,9 +80,10 @@ def match():
                 src_pts = np.float32([[m[0], m[1]] for m in matches])
                 dst_pts = np.float32([[m[2], m[3]] for m in matches])
 
-                M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, setting.RANSAC_THRESHOLD)
                 i = 0
                 inlier = []
+
+                M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, setting.RANSAC_THRESHOLD)
                 for index, m in enumerate(mask):
                     if np.isclose(m, 1):
                         i += 1
@@ -101,7 +104,7 @@ def summary():
     print("Summary:")
     result = common.load_json("output/result.json")
     for query_image, target_images in result.items():
-        print("Query Image" , query_image , "is probably", target_images[0]["class_name"], "with inlier feature points", target_images[0]["inlier"])
+        print("Query Image" , query_image , "is probably", target_images[0]["class_name"], "with" , target_images[0]["inlier"], "inlier feature points")
 
 if __name__ == "__main__":
     # gen_candidate_database()
