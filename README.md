@@ -127,7 +127,7 @@ If you like this work please cite our paper
   author={Liao, Chenyi and Wang, Weimin and Sakurada, Ken and Kawaguchi, Nobuo},
   journal={IEEE ACCESS},
   volume={6},
-  pages = {1-16},
+  pages = {45590-45605},
   year={2018}
 }
 ```
